@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import DynamicForms from '@/components/DynamicForms.vue';
+import DynamicForms from '@/components/DynamicDataRender.vue';
 
 const jsonData = ref<any>(null);
 
 onMounted(async () => {
   try {
-    const response = await fetch('src/data/json1.json'); // URL de votre fichier JSON
+    const response = await fetch('src/data/json2.json'); // URL de votre fichier JSON
     if (!response.ok) {
       throw new Error('Error data fetch JSON');
     }

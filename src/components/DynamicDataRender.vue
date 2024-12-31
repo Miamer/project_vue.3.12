@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { defineProps, computed } from 'vue';
+import { initFormData } from '../services/flattenObject.ts';
 
 const props = defineProps({
   form: {
@@ -9,8 +10,6 @@ const props = defineProps({
 });
 
 const formData = computed(() => {
-  console.log('props.form.data', props.form.data);
-
   if (props.form?.data) {
     const processedData = initFormData(props.form.data);
     console.log('Computed formData:', processedData);
@@ -20,29 +19,7 @@ const formData = computed(() => {
   return {};
 });
 
-function initFormData(data) {
-  const result = {};
 
-  function flattenObject(obj, parentKey = '') {
-    Object.keys(obj).forEach((key) => {
-      const value = obj[key];
-      const currentKey = parentKey ? `${parentKey}.${key}` : key;
-
-      if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
-        flattenObject(value, currentKey);
-      } else if (Array.isArray(value)) {
-        value.forEach((item, index) => {
-          flattenObject(item, `${currentKey}[${index}]`);
-        });
-      } else {
-        result[currentKey] = value;
-      }
-    });
-  }
-
-  flattenObject(data);
-  return result;
-}
 </script>
 
 <template>
