@@ -1,7 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import FirstPageView from '../views/FirstPageView.vue'
-import SecondPageView from '../views/SecondPageView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '../views/HomeView.vue';
+import FirstPageView from '../views/FirstPageView.vue';
+import SecondPageView from '../views/SecondPageView.vue';
+import ThirdPageView from '@/views/ThirdPageView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,14 +11,6 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
     },
     {
       path: '/firstPage',
@@ -29,7 +22,12 @@ const router = createRouter({
       name: 'secondPage',
       component: SecondPageView,
     },
+    {
+      path: '/thirdPage',
+      name: 'thirdPage',
+      component: ThirdPageView,
+    },
   ],
-})
+});
 
-export default router
+export default router;
