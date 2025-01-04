@@ -1,70 +1,68 @@
 <script setup lang="ts">
-import { defineProps, computed } from 'vue';
-import { initFormData } from '../services/flattenObject.ts';
+import { defineProps, ref, watch, computed, onMounted } from 'vue';
+import { extractFilteredData } from '../services/extractFilteredData.ts';
 
 const props = defineProps({
-  form: {
+  dataAll: {
     type: Object,
     required: true,
   },
 });
 
-const formData = computed(() => {
-  if (props.form?.data) {
-    const processedData = initFormData(props.form.data);
-    console.log('Computed formData:', processedData);
-    return processedData;
+const extractData = ref({});
+
+const updateSplitResult = (data: any) => {
+  if (data) {
+    const resultatSplitData = extractFilteredData(data.data);
+    extractData.value = resultatSplitData;
   }
+};
 
-  return {};
-});
+/*onMounted(() => {
+  updateSplitResult(props.dataAll);
+});*/
 
+
+watch(
+  () => props.dataAll,
+  (newVal) => {
+    console.log('Nouvelle valeur reçue pour dataAll :', newVal);
+    updateSplitResult(newVal);
+  },
+  {immediate: true},
+);
+
+console.log('extractData.value', extractData.value);
+/*const htmlData = computed(() => splitResult.value.htmlData);
+const componentData = computed(() => splitResult.value.componentData);*/
 
 </script>
 
 <template>
-  <div>
-    <h3>Formulaire Dynamique</h3>
-    <div v-for="(value, key) in formData" :key="key" class="form-group">
-      <label :for="key">{{ key }}</label>
-      <div>
-        <input
-          v-if="typeof value === 'string'"
-          v-model="formData[key]"
-          type="text"
-          :id="key"
-          :placeholder="key"
-        />
-        <input
-          v-if="typeof value === 'number'"
-          v-model="formData[key]"
-          type="number"
-          :id="key"
-          :placeholder="key"
-        />
-      </div>
-      <p v-if="typeof value !== 'string' && typeof value !== 'number'">
-        (Non modifiable : {{ value }})
-      </p>
+  <div ref="container">
+    <h3>Données séparées</h3>
+    <div>
+      <h4>HTML Data</h4>
+      <pre>{{ extractData }}</pre>
+    </div>
+    <div>
+      <h4>Component Data</h4>
+
     </div>
   </div>
 </template>
 
 <style scoped>
-.form-group {
-  margin-bottom: 1rem;
+div {
+  margin-left: 10px;
 }
 
-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+ul {
+  padding-left: 20px;
 }
 
-input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+[data-ref] {
+  font-style: italic;
+  color: gray;
 }
 </style>
