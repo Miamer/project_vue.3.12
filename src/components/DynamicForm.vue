@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defineProps, ref, watchEffect } from 'vue';
 import SaveButton from '@/components/SaveButton.vue';
+import InputComponent from '@/components/InputComponent.vue';
 
 
 const props = defineProps({
@@ -10,17 +11,41 @@ const props = defineProps({
   },
 });
 
-console.log('props.dataAll', props.dataAll);
-console.log('props.dataAll.form', props.dataAll.form);
-console.log('props.dataAll.form.components', props.dataAll.form.components);
 console.log('props.dataAll.form.components[0]', props.dataAll.form.components[0]);
+console.log('props.dataAll.form.components[0]', props.dataAll.form.components[1]);
 
-const testVariable = props.dataAll.form.components[0].label;
-console.log('testVariable ', testVariable);
+const testButton = props.dataAll.form.components[0];
+
+const testInput = props.dataAll.form.components[1];
+const reverseComponentForm = props.dataAll.form.components.reverse();
+
 </script>
 
 <template>
-  <SaveButton :label="testVariable"/>
+  <SaveButton :label="testButton.label" :disabled="testButton.disabled"/>
+
+  <InputComponent
+    :type="testInput.type"
+    :reference="testInput.key"
+    :label="testInput.label"
+    :disabled="testInput.disabled"
+    :validation="testInput.validation"
+    :required="testInput.required"
+  />
+
+
+  <form>
+    <label for="car">Choisissez une voiture :</label>
+    <select id="car" name="car">
+      <option value="volvo">Volvo</option>
+      <option value="saab">Saab</option>
+      <option value="mercedes">Mercedes</option>
+      <option value="audi">Audi</option>
+    </select>
+
+    <button type="submit">Envoyer</button>
+  </form>
+
 </template>
 
 <style scoped>
