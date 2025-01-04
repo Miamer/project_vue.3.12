@@ -38,7 +38,7 @@ watch(
 
 
 onMounted(async () => {
-  await nextTick();  // verifie que le DOM est bien monté voir https://fr.vuejs.org/api/general.html#nexttick
+  await nextTick();  // vérifie que le DOM est bien monté voir https://fr.vuejs.org/api/general.html#nexttick
 
   if (props.dataAll) {
     transformJSONInHTMLStructure(props.dataAll);

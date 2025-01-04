@@ -8,7 +8,7 @@ const titleData = ref<string>('');
 
 onMounted(async () => {
   try {
-    const response = await fetch('src/data/json3.json'); // URL de votre fichier JSON
+    const response = await fetch('src/data/json2.json'); // URL de votre fichier JSON
     if (!response.ok) {
       throw new Error('Error data fetch JSON');
     }
