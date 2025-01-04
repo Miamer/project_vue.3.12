@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import DynamicDataRender from '@/components/DynamicDataRender.vue';
+import DynamicForm from '@/components/DynamicForm.vue';
 
 const jsonData = ref<any>(null);
 const titleData = ref<string>('');
@@ -12,7 +13,7 @@ onMounted(async () => {
       throw new Error('Error data fetch JSON');
     }
     const data = await response.json();
-    jsonData.value = data;
+    jsonData.value = {...data};
 
     const firstKey = Object.keys(data.data)[0];
 
@@ -32,13 +33,12 @@ onMounted(async () => {
     <h2>Data of {{ titleData }}</h2>
     <div v-if="jsonData">
       <DynamicDataRender :dataAll="jsonData"/>
+      <DynamicForm :dataAll="jsonData"/>
     </div>
     <div v-else>
       <p>Chargement des données...</p>
     </div>
-    <div>
-      <DynamicForm :dataAll="jsonData"/>
-    </div>
+
   </div>
 </template>
 
