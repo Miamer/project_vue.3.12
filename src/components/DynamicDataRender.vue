@@ -49,15 +49,8 @@ onMounted(async () => {
 
 <template>
   <div ref="container">
-    <h3>Données séparées</h3>
-    <div>
-      <h4>HTML Data</h4>
-      <pre>{{ extractData }}</pre>
-    </div>
-    <div>
-      <h4>Component Data</h4>
-      <div ref="dataHtmlRender"></div>
-    </div>
+    <h3>Component Data</h3>
+    <div ref="dataHtmlRender"></div>
   </div>
 </template>
 
