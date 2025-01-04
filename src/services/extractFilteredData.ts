@@ -7,7 +7,7 @@ export function extractFilteredData(data: DataObject): DataObject {
 
   const objectKeys = Object.keys(rawData);
 
-  const filteredKeys = objectKeys.filter(key => !key.includes('_1'));
+  const filteredKeys = objectKeys.filter(key => !/_\d+$/.test(key));
 
   const filteredData = filteredKeys.reduce((result, key) => {
     result[key] = rawData[key];
