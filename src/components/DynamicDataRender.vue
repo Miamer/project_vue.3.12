@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { defineProps, ref, watch, computed, onMounted } from 'vue';
+import { defineProps, ref, watch, computed, onMounted, nextTick } from 'vue';
 import { extractFilteredData } from '../services/extractFilteredData.ts';
+import { createHTMLStructure } from '@/services/createHTMLStructure.ts';
 
 const props = defineProps({
   dataAll: {
@@ -10,32 +11,41 @@ const props = defineProps({
 });
 
 const extractData = ref({});
+const dataHtmlRender = ref<HTMLElement | null>(null);
 
-const updateSplitResult = (data: any) => {
+const transformJSONInHTMLStructure = async (data: any) => {
   if (data) {
     const resultatSplitData = extractFilteredData(data.data);
     extractData.value = resultatSplitData;
+
+    await nextTick();
+
+    if (dataHtmlRender.value) {
+
+      dataHtmlRender.value.innerHTML = '';
+      createHTMLStructure(resultatSplitData, dataHtmlRender.value);
+    }
   }
 };
-
-/*onMounted(() => {
-  updateSplitResult(props.dataAll);
-});*/
-
 
 watch(
   () => props.dataAll,
   (newVal) => {
-    console.log('Nouvelle valeur reçue pour dataAll :', newVal);
-    updateSplitResult(newVal);
+    transformJSONInHTMLStructure(newVal);
   },
   {immediate: true},
 );
 
-console.log('extractData.value', extractData.value);
-/*const htmlData = computed(() => splitResult.value.htmlData);
-const componentData = computed(() => splitResult.value.componentData);*/
 
+// Action lors du montage
+onMounted(async () => {
+
+  // verifie que le DOM est bien monté voir https://fr.vuejs.org/api/general.html#nexttick
+  await nextTick();
+  if (props.dataAll) {
+    transformJSONInHTMLStructure(props.dataAll);
+  }
+});
 </script>
 
 <template>
@@ -47,7 +57,7 @@ const componentData = computed(() => splitResult.value.componentData);*/
     </div>
     <div>
       <h4>Component Data</h4>
-
+      <div ref="dataHtmlRender"></div>
     </div>
   </div>
 </template>
