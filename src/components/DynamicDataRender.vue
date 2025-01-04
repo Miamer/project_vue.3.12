@@ -49,7 +49,6 @@ onMounted(async () => {
 
 <template>
   <div ref="container">
-    <h3>Component Data</h3>
     <div ref="dataHtmlRender"></div>
   </div>
 </template>
