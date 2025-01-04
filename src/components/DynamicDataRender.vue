@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, ref, watch, computed, onMounted, nextTick } from 'vue';
+import { defineProps, ref, watch, onMounted, nextTick } from 'vue';
 import { extractFilteredData } from '../services/extractFilteredData.ts';
 import { createHTMLStructure } from '@/services/createHTMLStructure.ts';
 
@@ -15,15 +15,15 @@ const dataHtmlRender = ref<HTMLElement | null>(null);
 
 const transformJSONInHTMLStructure = async (data: any) => {
   if (data) {
-    const resultatSplitData = extractFilteredData(data.data);
-    extractData.value = resultatSplitData;
+    const domData = extractFilteredData(data.data);
+    extractData.value = domData;
 
     await nextTick();
 
     if (dataHtmlRender.value) {
 
       dataHtmlRender.value.innerHTML = '';
-      createHTMLStructure(resultatSplitData, dataHtmlRender.value);
+      createHTMLStructure(domData, dataHtmlRender.value);
     }
   }
 };
@@ -37,15 +37,14 @@ watch(
 );
 
 
-// Action lors du montage
 onMounted(async () => {
+  await nextTick();  // verifie que le DOM est bien monté voir https://fr.vuejs.org/api/general.html#nexttick
 
-  // verifie que le DOM est bien monté voir https://fr.vuejs.org/api/general.html#nexttick
-  await nextTick();
   if (props.dataAll) {
     transformJSONInHTMLStructure(props.dataAll);
   }
 });
+
 </script>
 
 <template>
