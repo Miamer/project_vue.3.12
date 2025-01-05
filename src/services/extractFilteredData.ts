@@ -23,6 +23,7 @@ export function extractFilteredData(data: DataObject): DataObject {
       result[key] = value;
     }
 
+
     return result;
   }, {} as DataObject);
 

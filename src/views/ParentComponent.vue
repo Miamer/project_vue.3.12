@@ -29,8 +29,8 @@ onMounted(async () => {
 
 const pureData = ref({});
 
-const dataRender = ref({});
-const dataForm = ref({});
+const domStructureRender = ref({});
+const domStructureForm = ref({});
 
 
 const extractData = (data: any) => {
@@ -38,23 +38,25 @@ const extractData = (data: any) => {
     const {buildDataRender} = extractFilteredData(data.data);
     const {buildDataComponent} = extractFilteredData(data.data);
 
-    dataRender.value = buildDataRender;
-    dataForm.value = buildDataComponent;
+    domStructureRender.value = buildDataRender;
+
+    console.log('jsonData.value.form.components', jsonData.value.form.components);
+    domStructureForm.value = jsonData.value.form.components;
+
+    /*    domStructureForm.value = buildDataComponent;*/
 
   }
 };
-
 
 watch(
   jsonData,
   (newVal) => {
     extractData(newVal);
-    console.log('dataRender.value', dataRender.value);
-    console.log('dataForm.value', dataForm.value);
+    console.log('domStructureRender.value', domStructureRender.value);
+    console.log('domStructureForm.value', domStructureForm.value);
   },
   {immediate: true},
 );
-
 
 onMounted(async () => {
   if (jsonData.value) {
@@ -70,8 +72,8 @@ onMounted(async () => {
     <h1>First Page of json 1</h1>
     <h2>Data of {{ titleData }}</h2>
     <div v-if="jsonData">
-      <DynamicRender :dataRender="dataRender"/>
-      <DynamicForm :dataAll="jsonData"/>
+      <DynamicRender :domStructureRender="domStructureRender"/>
+      <DynamicForm :domStructureForm="domStructureForm"/>
     </div>
     <div v-else>
       <p>Chargement des données...</p>

@@ -3,7 +3,7 @@ import { defineProps, ref, watch, onMounted, nextTick } from 'vue';
 import { createHTMLStructure } from '@/services/createHTMLStructure.ts';
 
 const props = defineProps({
-  dataRender: {
+  domStructureRender: {
     type: Object,
     required: true,
   },
@@ -17,13 +17,13 @@ const transformJSONInHTMLStructure = async (data: any) => {
 
     if (dataHtmlRender.value) {
       dataHtmlRender.value.innerHTML = '';
-      createHTMLStructure(props.dataRender, dataHtmlRender.value);
+      createHTMLStructure(props.domStructureRender, dataHtmlRender.value);
     }
   }
 };
 
 watch(
-  () => props.dataRender,
+  () => props.domStructureRender,
   (newVal) => {
     transformJSONInHTMLStructure(newVal);
   },
@@ -34,8 +34,8 @@ watch(
 onMounted(async () => {
   await nextTick();  // vérifie que le DOM est bien monté voir https://fr.vuejs.org/api/general.html#nexttick
 
-  if (props.dataRender) {
-    await transformJSONInHTMLStructure(props.dataRender);
+  if (props.domStructureRender) {
+    await transformJSONInHTMLStructure(props.domStructureRender);
   }
 });
 
