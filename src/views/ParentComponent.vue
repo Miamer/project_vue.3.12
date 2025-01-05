@@ -2,11 +2,18 @@
 import { onMounted, ref, watch } from 'vue';
 import DynamicRender from '@/components/DynamicRender.vue';
 import DynamicForm from '@/components/DynamicForm.vue';
-import { extractFilteredData } from '@/services/extractFilteredData.ts';
+import { extractFilteredData } from '../utils/extractFilteredData.ts';
+import type { DomStructure } from '../shared/type.ts';
+import { mergeValueWithDomStructure } from '@/utils/mergeValueAndDomStructureForm.ts';
 
 
 const jsonData = ref<any>(null);
 const titleData = ref<string>('');
+
+
+const domStructureRender = ref({});
+const domStructureAndValueForm = ref<DomStructure[]>([{}]);
+
 
 onMounted(async () => {
   try {
@@ -26,45 +33,40 @@ onMounted(async () => {
   }
 });
 
-
-const pureData = ref({});
-
-const domStructureRender = ref({});
-const domStructureForm = ref({});
-
-
-const extractData = (data: any) => {
+const initData = (data: any) => {
   if (data) {
-    const {buildDataRender} = extractFilteredData(data.data);
+    /*Structre*/
+    const {buildStructureRender} = extractFilteredData(data.data);
+    domStructureRender.value = buildStructureRender;
+    const domStructureForm = jsonData.value.form.components.reverse();
+
+
     const {buildDataComponent} = extractFilteredData(data.data);
 
-    domStructureRender.value = buildDataRender;
+    const domStructureAndDataForm = mergeValueWithDomStructure(buildDataComponent, domStructureForm);
+    domStructureAndValueForm.value = domStructureAndDataForm;
 
-    console.log('jsonData.value.form.components', jsonData.value.form.components);
-    domStructureForm.value = jsonData.value.form.components;
-
-    /*    domStructureForm.value = buildDataComponent;*/
-
+    console.log('domStructureAndDataForm', domStructureAndDataForm);
   }
 };
+
+/*const updateValue = (keyObject: string, newValue: string) => {
+  pureDataForm.value[keyObject] = newValue;
+};*/
 
 watch(
   jsonData,
   (newVal) => {
-    extractData(newVal);
-    console.log('domStructureRender.value', domStructureRender.value);
-    console.log('domStructureForm.value', domStructureForm.value);
+    initData(newVal);
   },
   {immediate: true},
 );
 
 onMounted(async () => {
   if (jsonData.value) {
-    extractData(jsonData.value);
+    initData(jsonData.value);
   }
 });
-
-
 </script>
 
 <template>
@@ -73,7 +75,7 @@ onMounted(async () => {
     <h2>Data of {{ titleData }}</h2>
     <div v-if="jsonData">
       <DynamicRender :domStructureRender="domStructureRender"/>
-      <DynamicForm :domStructureForm="domStructureForm"/>
+      <DynamicForm :domStructureAndValueForm="domStructureAndValueForm"/>
     </div>
     <div v-else>
       <p>Chargement des données...</p>

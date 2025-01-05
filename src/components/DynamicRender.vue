@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineProps, ref, watch, onMounted, nextTick } from 'vue';
-import { createHTMLStructure } from '@/services/createHTMLStructure.ts';
+import { createHTMLStructure } from '../utils/createHTMLStructure.ts';
 
 const props = defineProps({
   domStructureRender: {

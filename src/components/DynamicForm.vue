@@ -3,31 +3,22 @@
 import { defineProps } from 'vue';
 import type { PropType } from 'vue';
 import InputComponent from '@/components/InputComponent.vue';
+import type { DomStructure } from '../shared/type.ts';
 
-type DomStructure = {
-  type?: string;
-  key?: string;
-  reference?: string;
-  label?: string;
-  disabled?: boolean
-  validation?: boolean
-  required?: boolean
-};
 
 const props = defineProps({
-  domStructureForm: {
+  domStructureAndValueForm: {
     type: Array as PropType<DomStructure[]>,
     required: true,
   },
 });
 
-console.log('props', props);
 </script>
 
 
 <template>
-  <div v-for="component in props.domStructureForm">
-    <div>{{ component.type }}.</div>
+  <div v-for="component in props.domStructureAndValueForm">
+    <div>{{ component.label }}</div>
     <InputComponent
       :type="component.type"
       :reference="component.key"
@@ -35,6 +26,7 @@ console.log('props', props);
       :disabled="component.disabled"
       :validation="component.validation"
       :required="component.required"
+      :value="component.value"
     />
   </div>
 </template>

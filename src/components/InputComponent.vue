@@ -8,7 +8,7 @@ const props = withDefaults(defineProps<{
       disabled: boolean;
       validation: string;
       required: boolean;
-
+      value?: string | number;
     }>(),
 {
   type: 'input',
@@ -43,6 +43,7 @@ const onInputChange = (event: Event, reference: string) => {
     :label="props.label"
     :disabled="props.disabled"
     :required="props.required"
+    :value="props.value"
     @input="onInputChange($event, props.reference)"
   />
 </template>

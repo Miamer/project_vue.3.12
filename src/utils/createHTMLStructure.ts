@@ -1,3 +1,5 @@
+import { DATAREF } from '@/shared/constante.ts';
+
 /**
  * Fonction pour générer une structure HTML à partir d'une donnée JSON.
  * @param data - Les données JSON à transformer en structure HTML.
@@ -15,7 +17,7 @@ export function createHTMLStructure(
       const refPath = [...path, key].join('_');
       const div = document.createElement('div');
       div.className = key;
-      div.setAttribute('data-ref', refPath);
+      div.setAttribute(DATAREF, refPath);
       div.textContent = `${key}:`;
       parent.appendChild(div);
       createHTMLStructure(value, div, [...path, key]);
@@ -27,7 +29,7 @@ export function createHTMLStructure(
     data.forEach((item, index) => {
       const refPath = [...path, index.toString()].join('_');
       const li = document.createElement('li');
-      li.setAttribute('data-ref', refPath);
+      li.setAttribute(DATAREF, refPath);
       ul.appendChild(li);
       createHTMLStructure(item, li, [...path, index.toString()]);
     });
@@ -36,7 +38,7 @@ export function createHTMLStructure(
     const refPath = path.join('_');
     const span = document.createElement('span');
     span.textContent = ` ${String(data)}`;
-    span.setAttribute('data-ref', refPath);
+    span.setAttribute(DATAREF, refPath);
     parent.appendChild(span);
   }
 }

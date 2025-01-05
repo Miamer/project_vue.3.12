@@ -8,7 +8,7 @@ export function extractFilteredData(data: DataObject): DataObject {
   const objectKeys = Object.keys(rawData);
 
   const filteredKeysRender = objectKeys.filter(key => !/_\d+$/.test(key));
-  const buildDataRender = filteredKeysRender.reduce((result, key) => {
+  const buildStructureRender = filteredKeysRender.reduce((result, key) => {
     result[key] = rawData[key];
     return result;
   }, {} as DataObject);
@@ -27,5 +27,5 @@ export function extractFilteredData(data: DataObject): DataObject {
     return result;
   }, {} as DataObject);
 
-  return {buildDataRender, buildDataComponent};
+  return {buildStructureRender, buildDataComponent};
 }
