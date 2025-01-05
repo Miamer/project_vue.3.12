@@ -1,35 +1,29 @@
 <script setup lang="ts">
 import { defineProps, ref, watch, onMounted, nextTick } from 'vue';
-import { extractFilteredData } from '../services/extractFilteredData.ts';
 import { createHTMLStructure } from '@/services/createHTMLStructure.ts';
 
 const props = defineProps({
-  dataAll: {
+  dataRender: {
     type: Object,
     required: true,
   },
 });
 
-const extractData = ref({});
 const dataHtmlRender = ref<HTMLElement | null>(null);
 
 const transformJSONInHTMLStructure = async (data: any) => {
   if (data) {
-    const domData = extractFilteredData(data.data);
-    extractData.value = domData;
-
     await nextTick();
 
     if (dataHtmlRender.value) {
-
       dataHtmlRender.value.innerHTML = '';
-      createHTMLStructure(domData, dataHtmlRender.value);
+      createHTMLStructure(props.dataRender, dataHtmlRender.value);
     }
   }
 };
 
 watch(
-  () => props.dataAll,
+  () => props.dataRender,
   (newVal) => {
     transformJSONInHTMLStructure(newVal);
   },
@@ -40,8 +34,8 @@ watch(
 onMounted(async () => {
   await nextTick();  // vérifie que le DOM est bien monté voir https://fr.vuejs.org/api/general.html#nexttick
 
-  if (props.dataAll) {
-    transformJSONInHTMLStructure(props.dataAll);
+  if (props.dataRender) {
+    await transformJSONInHTMLStructure(props.dataRender);
   }
 });
 

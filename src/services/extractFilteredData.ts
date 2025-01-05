@@ -7,12 +7,24 @@ export function extractFilteredData(data: DataObject): DataObject {
 
   const objectKeys = Object.keys(rawData);
 
-  const filteredKeys = objectKeys.filter(key => !/_\d+$/.test(key));
-
-  const filteredData = filteredKeys.reduce((result, key) => {
+  const filteredKeysRender = objectKeys.filter(key => !/_\d+$/.test(key));
+  const buildDataRender = filteredKeysRender.reduce((result, key) => {
     result[key] = rawData[key];
     return result;
   }, {} as DataObject);
 
-  return filteredData;
+
+  const filteredKeysComponent = objectKeys.filter(key => /_\d+$/.test(key));
+  const buildDataComponent = filteredKeysComponent.reduce((result, key) => {
+    const value = rawData[key];
+    if (value && typeof value === 'object' && ('value' in value || 'name' in value)) {
+      result[key] = value.value || value.name;
+    } else {
+      result[key] = value;
+    }
+
+    return result;
+  }, {} as DataObject);
+
+  return {buildDataRender, buildDataComponent};
 }

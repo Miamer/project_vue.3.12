@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, withDefaults } from 'vue';
+import { defineProps, withDefaults, defineEmits } from 'vue';
 
 const props = withDefaults(defineProps<{
       type: string;
@@ -8,6 +8,7 @@ const props = withDefaults(defineProps<{
       disabled: boolean;
       validation: string;
       required: boolean;
+      modelValue: any;
     }>(),
 {
   type: 'input',
@@ -15,6 +16,7 @@ const props = withDefaults(defineProps<{
   disabled: false,
   validation: '',
   required: false,
+  modelValue: '',
 });
 
 const inputType = (type: string, validation: string) => {
@@ -23,6 +25,14 @@ const inputType = (type: string, validation: string) => {
   }
   return type == 'input' ? 'string' : type;
 };
+
+const emit = defineEmits();
+
+const onInputChange = (event: Event, reference: string) => {
+  console.log(`event: ${event} update:${reference}`);
+  emit(`update:${reference}`, (event.target as HTMLInputElement).value);
+};
+
 
 </script>
 
@@ -33,6 +43,8 @@ const inputType = (type: string, validation: string) => {
     :label="props.label"
     :disabled="props.disabled"
     :required="props.required"
+    :value="props.modelValue"
+    @input="onInputChange($event, props.reference)"
   />
 </template>
 

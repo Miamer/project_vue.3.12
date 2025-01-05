@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
-import FirstPageView from '../views/FirstPageView.vue';
+import FirstPageView from '../views/ParentComponent.vue';
 import SecondPageView from '../views/SecondPageView.vue';
 import ThirdPageView from '@/views/ThirdPageView.vue';
 
