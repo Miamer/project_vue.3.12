@@ -3,7 +3,7 @@ import { defineProps, withDefaults, defineEmits } from 'vue';
 
 const props = withDefaults(defineProps<{
       type: string;
-      reference: string;
+      reference?: string;
       label: string;
       disabled: boolean;
       validation: string;

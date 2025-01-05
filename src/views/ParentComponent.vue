@@ -5,6 +5,7 @@ import DynamicForm from '@/components/DynamicForm.vue';
 import { extractFilteredData } from '../utils/extractFilteredData.ts';
 import type { DomStructure } from '../shared/type.ts';
 import { mergeValueWithDomStructure } from '@/utils/mergeValueAndDomStructureForm.ts';
+import { transformKeyToReference } from '@/utils/transformKeyToReference.ts';
 
 
 const jsonData = ref<any>(null);
@@ -17,7 +18,7 @@ const domStructureAndValueForm = ref<DomStructure[]>([{}]);
 
 onMounted(async () => {
   try {
-    const response = await fetch('src/data/json1.json'); // URL de votre fichier JSON
+    const response = await fetch('src/data/json2.json'); // URL de votre fichier JSON
     if (!response.ok) {
       throw new Error('Error data fetch JSON');
     }
@@ -35,21 +36,28 @@ onMounted(async () => {
 
 const initData = (data: any) => {
   if (data) {
-    /*Structre*/
+    /*Structure render*/
     const {buildStructureRender} = extractFilteredData(data.data);
     domStructureRender.value = buildStructureRender;
+
+    /*Structure and value form*/
     const domStructureForm = jsonData.value.form.components.reverse();
-
-
     const {buildDataComponent} = extractFilteredData(data.data);
 
     const domStructureAndDataForm = mergeValueWithDomStructure(buildDataComponent, domStructureForm);
-    domStructureAndValueForm.value = domStructureAndDataForm;
+    const domAndDataFormWithReference = transformKeyToReference(domStructureAndDataForm);
 
-    console.log('domStructureAndDataForm', domStructureAndDataForm);
+    domStructureAndValueForm.value = domAndDataFormWithReference;
+
+    console.log('domStructureAndValueForm.value', domStructureAndValueForm.value);
   }
 };
 
+
+/*
+1- ce que je dois essayé de faire maintenant est de remonter les modification dans domStructureAndValue
+2- pour les component input qui n'aurait pas de value je peux les lié
+ */
 /*const updateValue = (keyObject: string, newValue: string) => {
   pureDataForm.value[keyObject] = newValue;
 };*/
@@ -72,9 +80,11 @@ onMounted(async () => {
 <template>
   <div>
     <h1>First Page of json 1</h1>
-    <h2>Data of {{ titleData }}</h2>
+    <h2>Render</h2>
+    <h3>Data of {{ titleData }}</h3>
     <div v-if="jsonData">
       <DynamicRender :domStructureRender="domStructureRender"/>
+      <h2>Form</h2>
       <DynamicForm :domStructureAndValueForm="domStructureAndValueForm"/>
     </div>
     <div v-else>

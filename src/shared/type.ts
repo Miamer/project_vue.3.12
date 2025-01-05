@@ -7,4 +7,7 @@ export type DomStructure = {
   validation?: boolean;
   required?: boolean;
   value?: string | number;
+  options?: {
+    items: { value: string | number; label: string }[];
+  };
 };
