@@ -1,14 +1,21 @@
 <script setup lang="ts">
-import { defineProps, withDefaults } from 'vue';
+import { defineProps, watch, withDefaults } from 'vue';
 
 const props = withDefaults(defineProps<{
+      type: string;
+      reference?: string;
       label: string;
       disabled: boolean;
+      validation: string;
+      required: boolean;
+      value?: string | number;
     }>(),
 {
   label: 'Submit',
-  disabled: false,
+  disabled: true,
 });
+
+
 </script>
 
 <template>

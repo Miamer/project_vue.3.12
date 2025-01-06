@@ -59,13 +59,10 @@ const initData = (data: any) => {
 };
 
 
-/*
+/*exo:
 1- ce que je dois essayé de faire maintenant est de remonter les modification dans domStructureAndValue
 2- pour les component input qui n'aurait pas de value je peux les lié
  */
-/*const updateValue = (keyObject: string, newValue: string) => {
-  pureDataForm.value[keyObject] = newValue;
-};*/
 
 watch(
   jsonData,
@@ -88,7 +85,6 @@ onMounted(async () => {
 
 <template>
   <div>
-    <h1>First Page of json 1</h1>
     <h2>Render</h2>
     <h3>Data of {{ titleData }}</h3>
     <div v-if="jsonData">

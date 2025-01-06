@@ -1,5 +1,5 @@
 export type DomStructure = {
-  type?: string;
+  type: string;
   key?: string;
   reference?: string;
   label?: string;

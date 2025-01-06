@@ -17,7 +17,6 @@ const props = withDefaults(defineProps<{
   options: {items: []},
 });
 
-console.log('options', props.options);
 const emit = defineEmits();
 
 const onValueChange = (event: Event) => {

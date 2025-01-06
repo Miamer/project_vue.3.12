@@ -19,6 +19,8 @@ const props = withDefaults(defineProps<{
 
 });
 
+const emit = defineEmits();
+
 const inputType = (type: string, validation: string) => {
   if (validation) {
     return validation;
@@ -26,14 +28,12 @@ const inputType = (type: string, validation: string) => {
   return type == 'input' ? 'string' : type;
 };
 
-const emit = defineEmits();
 
-const onInputChange = (event: Event, reference: string) => {
-  console.log(`event: ${event} update:${reference}`);
-  emit(`update:${reference}`, (event.target as HTMLInputElement).value);
+const onInputChange = (event: Event) => {
+  const inputElement = event.target as HTMLInputElement;
+
+  emit('update:value', inputElement.value, props.type);
 };
-
-
 </script>
 
 <template>
@@ -44,7 +44,8 @@ const onInputChange = (event: Event, reference: string) => {
     :disabled="props.disabled"
     :required="props.required"
     :value="props.value"
-    @input="onInputChange($event, props.reference)"
+    @input="onInputChange($event)"
+
   />
 </template>
 

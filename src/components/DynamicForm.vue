@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import { defineProps, ref, computed, watch, onMounted } from 'vue';
 import type { PropType } from 'vue';
 
 import type { DomStructure } from '../shared/type.ts';
@@ -7,14 +7,51 @@ import type { DomStructure } from '../shared/type.ts';
 const props = defineProps({
   domStructureAndValueForm: {
     type: Array as PropType<DomStructure[]>,
-    required: true,
+    required: false,
   },
 });
+
+const formValues = ref<Record<string, string | number | null>>(
+  Object.fromEntries(
+    props.domStructureAndValueForm
+      .filter((field) => ['date', 'input', 'select'].includes(field.type))
+      .map((field) => [field.reference, field.value || null]),
+  ),
+);
+
+const isFormValid = computed(() => {
+  return Object.values(formValues.value).every(value => value !== '' && value !== null);
+});
+
+function updateFieldValue(reference: string, value: string | number | null, type: string) {
+  console.log(`ref: ${reference} value: ${value}`);
+  formValues.value = {...formValues.value, [reference]: value};
+}
+
+function getComponentType(index: number, type: string, value: any): string {
+  if (index === props.domStructureAndValueForm.length - 1 && !value) {
+    return 'submit';
+  }
+
+  return type;
+}
+
+
+watch(formValues, (newValue) => {
+  console.log('formValues a changé', newValue);
+  console.log('isFormValid:', isFormValid.value);
+});
+
+onMounted(() => {
+  console.log('isFormValid:', isFormValid.value);
+});
+
+
 </script>
 
 <template>
 
-  <div v-for="component in props.domStructureAndValueForm" :key="component.reference">
+  <div v-for="(component, index) in props.domStructureAndValueForm" :key="component.reference">
 
     <component
       class="generic-component"
@@ -24,15 +61,18 @@ const props = defineProps({
         props.domStructureAndValueForm.length,
         component.value
       )"
-      :type="component.type"
+      :type="getComponentType(index, component.type, component.value)"
       :reference="component.reference"
       :label="component.label"
-      :disabled="component.disabled"
+      :disabled="component.type === 'submit' ? !isFormValid.value : component.disabled"
       :validation="component.validation"
       :required="component.required"
       :value="component.value"
       :options="component.options"
+      @update:value="updateFieldValue(component.reference, $event, component.type)"
     />
+
+
   </div>
 </template>
 
@@ -44,10 +84,8 @@ import PersonComponent from '@/components/generic/PersonComponent.vue';
 import SelectComponent from '@/components/generic/SelectComponent.vue';
 import SubmitButton from '@/components/generic/SubmitButton.vue';
 
-function resolveComponent(type: string, index: number, componentsLength: number, componentValue: boolean) {
-  if (index === componentsLength - 1 && !componentValue) {
-    return SubmitButton;
-  }
+function resolveComponent(type: string, index: number, componentsLength: number, componentValue?: string | number) {
+
   switch (type) {
   case 'button':
     return SaveButton;
@@ -60,6 +98,8 @@ function resolveComponent(type: string, index: number, componentsLength: number,
     return ListComponent;
   case 'person':
     return PersonComponent;
+  case 'submit':
+    return SubmitButton;
   default:
     throw new Error(`Unknown component type: ${type}`);
   }
