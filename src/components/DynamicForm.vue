@@ -18,7 +18,12 @@ const props = defineProps({
 
     <component
       class="generic-component"
-      :is="resolveComponent(component.type)"
+      :is="resolveComponent(
+        component.type,
+        index,
+        props.domStructureAndValueForm.length,
+        component.value
+      )"
       :type="component.type"
       :reference="component.reference"
       :label="component.label"
@@ -33,12 +38,16 @@ const props = defineProps({
 
 <script lang="ts">
 import InputComponent from '@/components/generic/InputComponent.vue';
-import SaveButton from '@/components/generic/SaveButton.vue';
+import SaveButton from '@/components/generic/ButtonComponent.vue';
 import ListComponent from '@/components/generic/ListComponent.vue';
 import PersonComponent from '@/components/generic/PersonComponent.vue';
 import SelectComponent from '@/components/generic/SelectComponent.vue';
+import SubmitButton from '@/components/generic/SubmitButton.vue';
 
-function resolveComponent(type) {
+function resolveComponent(type: string, index: number, componentsLength: number, componentValue: boolean) {
+  if (index === componentsLength - 1 && !componentValue) {
+    return SubmitButton;
+  }
   switch (type) {
   case 'button':
     return SaveButton;
