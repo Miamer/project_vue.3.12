@@ -13,9 +13,11 @@ const props = defineProps({
 </script>
 
 <template>
+
   <div v-for="component in props.domStructureAndValueForm" :key="component.reference">
-    <div>{{ component.label }}</div>
+
     <component
+      class="generic-component"
       :is="resolveComponent(component.type)"
       :type="component.type"
       :reference="component.reference"
@@ -56,4 +58,7 @@ function resolveComponent(type) {
 </script>
 
 <style scoped>
+.generic-component {
+  margin-bottom: 15px;
+}
 </style>
