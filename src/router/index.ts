@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
-import FirstPageView from '../views/ParentComponent.vue';
+import Parent from '../views/ParentComponent.vue';
 import SecondPageView from '../views/SecondPageView.vue';
 import ThirdPageView from '@/views/ThirdPageView.vue';
 
@@ -13,19 +13,9 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/firstPage',
-      name: 'firstPage',
-      component: FirstPageView,
-    },
-    {
-      path: '/secondPage',
-      name: 'secondPage',
-      component: SecondPageView,
-    },
-    {
-      path: '/thirdPage',
-      name: 'thirdPage',
-      component: ThirdPageView,
+      path: '/page/:jsonFile',
+      name: 'page',
+      component: Parent,
     },
   ],
 });

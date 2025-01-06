@@ -7,10 +7,10 @@ defineProps<{}>();
 
 <template>
   <nav>
-    <RouterLink to="/"><h1>Home</h1></RouterLink>
-    <RouterLink to="/firstPage"><h1>Json1</h1></RouterLink>
-    <RouterLink to="/secondPage"><h1>Json2</h1></RouterLink>
-    <RouterLink to="/thirdPage"><h1>Json3</h1></RouterLink>
+    <router-link to="/">Home</router-link>
+    <router-link :to="{ name: 'page', params: { jsonFile: 'json1' } }">JSON 1</router-link>
+    <router-link :to="{ name: 'page', params: { jsonFile: 'json2' } }">JSON 2</router-link>
+    <router-link :to="{ name: 'page', params: { jsonFile: 'json3' } }">JSON 3</router-link>
   </nav>
 </template>
 

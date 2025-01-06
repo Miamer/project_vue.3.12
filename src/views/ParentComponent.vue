@@ -6,7 +6,9 @@ import { extractFilteredData } from '../utils/extractFilteredData.ts';
 import type { DomStructure } from '../shared/type.ts';
 import { mergeValueWithDomStructure } from '@/utils/mergeValueAndDomStructureForm.ts';
 import { transformKeyToReference } from '@/utils/transformKeyToReference.ts';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
 
 const jsonData = ref<any>(null);
 const titleData = ref<string>('');
@@ -15,10 +17,9 @@ const titleData = ref<string>('');
 const domStructureRender = ref({});
 const domStructureAndValueForm = ref<DomStructure[]>([{}]);
 
-
-onMounted(async () => {
+const loadData = async (jsonFile: string) => {
   try {
-    const response = await fetch('src/data/json2.json'); // URL de votre fichier JSON
+    const response = await fetch(`/data/${jsonFile}.json`);  // URL de votre fichier JSON
     if (!response.ok) {
       throw new Error('Error data fetch JSON');
     }
@@ -32,6 +33,10 @@ onMounted(async () => {
   } catch (error) {
     console.error('Erreur:', error);
   }
+};
+
+onMounted(() => {
+  loadData(route.params.jsonFile as string);
 });
 
 const initData = (data: any) => {
@@ -69,6 +74,10 @@ watch(
   },
   {immediate: true},
 );
+
+watch(() => route.params.jsonFile, (newFile) => {
+  if (newFile) loadData(newFile as string);
+});
 
 onMounted(async () => {
   if (jsonData.value) {
