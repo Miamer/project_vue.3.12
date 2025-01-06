@@ -30,11 +30,11 @@ const props = defineProps({
 </template>
 
 <script lang="ts">
-import InputComponent from '@/components/InputComponent.vue';
-import SaveButton from '@/components/SaveButton.vue';
-import ListComponent from '@/components/ListComponent.vue';
-import PersonComponent from '@/components/PersonComponent.vue';
-import SelectComponent from '@/components/SelectComponent.vue';
+import InputComponent from '@/components/generic/InputComponent.vue';
+import SaveButton from '@/components/generic/SaveButton.vue';
+import ListComponent from '@/components/generic/ListComponent.vue';
+import PersonComponent from '@/components/generic/PersonComponent.vue';
+import SelectComponent from '@/components/generic/SelectComponent.vue';
 
 function resolveComponent(type) {
   switch (type) {
